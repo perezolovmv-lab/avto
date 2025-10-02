@@ -1,0 +1,56 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Data.InMemory/1.0.0": {
+        "dependencies": {
+          "AutoServiceApp.Domain": "1.0.0",
+          "Data.Interfaces": "1.0.0"
+        },
+        "runtime": {
+          "Data.InMemory.dll": {}
+        }
+      },
+      "AutoServiceApp.Domain/1.0.0": {
+        "runtime": {
+          "AutoServiceApp.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Data.Interfaces/1.0.0": {
+        "dependencies": {
+          "AutoServiceApp.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Data.Interfaces.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Data.InMemory/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AutoServiceApp.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Data.Interfaces/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
