@@ -1,0 +1,182 @@
+﻿<Window x:Class="AutoServiceApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:AutoServiceApp.Converters"
+        Title="Автосервис 'АвтоТранс' - Система учета заявок" 
+        Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        MinHeight="600" MinWidth="1000"
+        Background="#F4F6F8"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
+
+    <Window.Resources>
+        <!-- Конвертер -->
+        <converters:StatusToTextConverter x:Key="StatusToTextConverter"/>
+
+        <!-- Стили кнопок -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#43A047"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#388E3C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для статусов -->
+        <Style x:Key="StatusStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="New">
+                    <Setter Property="Foreground" Value="#1976D2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="InProgress">
+                    <Setter Property="Foreground" Value="#F57C00"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}" Value="Completed">
+                    <Setter Property="Foreground" Value="#388E3C"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <!-- Меню -->
+        <Menu DockPanel.Dock="Top" Background="#E0E0E0" Foreground="#333333">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Выход" Click="ExitMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="Справочники">
+                <MenuItem Header="Пользователи" Click="UsersMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="Отчёты">
+                <MenuItem Header="Статистика заявок" Click="ReportsMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="Справка">
+                <MenuItem Header="О программе" Click="AboutMenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Панель инструментов -->
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar Background="#F8F9FA">
+                <Button Style="{StaticResource ActionButtonStyle}" Content="Добавить" Click="AddRequest_Click"/>
+                <Button Style="{StaticResource ActionButtonStyle}" Content="Редактировать" Click="EditRequest_Click"/>
+                <Button Style="{StaticResource ActionButtonStyle}" Content="Удалить" Click="DeleteRequest_Click" Background="#E53935"/>
+                <Separator/>
+                <Button Style="{StaticResource ActionButtonStyle}" Content="Обновить" Click="Refresh_Click"/>
+            </ToolBar>
+        </ToolBarTray>
+
+        <!-- Основное содержимое -->
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Фильтры -->
+            <Border BorderBrush="#B0BEC5" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0 0 0 10" Background="White">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="5" Foreground="#333"/>
+                    <TextBox x:Name="SearchTextBox" Width="250" Margin="5"
+                             TextChanged="SearchTextBox_TextChanged" 
+                             ToolTip="Поиск по клиенту, авто или описанию"/>
+
+                    <TextBlock Text="Статус:" VerticalAlignment="Center" Margin="15,0,5,0" Foreground="#333"/>
+                    <ComboBox x:Name="StatusFilter" Width="150" Margin="5"
+                              SelectionChanged="StatusFilter_SelectionChanged"/>
+
+                    <Button Content="Сброс" Width="80" Height="28" Margin="15,0,0,0"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Background="#F44336"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Таблица заявок -->
+            <DataGrid x:Name="RequestsGrid" AutoGenerateColumns="False" 
+                      Grid.Row="1" 
+                      Margin="0,0,0,10"
+                      SelectionMode="Single"
+                      IsReadOnly="True"
+                      GridLinesVisibility="Horizontal"
+                      AlternatingRowBackground="#F1F8E9"
+                      RowBackground="White"
+                      RowHeight="35"
+                      FontSize="14"
+                      SelectionChanged="RequestsGrid_SelectionChanged"
+                      MouseDoubleClick="RequestsGrid_MouseDoubleClick"
+                      BorderBrush="#B0BEC5"
+                      BorderThickness="1">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№" Binding="{Binding Id}" Width="50"/>
+                    <DataGridTextColumn Header="Дата" Binding="{Binding CreatedDate, StringFormat=dd.MM.yyyy HH:mm}" Width="140"/>
+                    <DataGridTextColumn Header="Марка" Binding="{Binding CarBrand}" Width="100"/>
+                    <DataGridTextColumn Header="Модель" Binding="{Binding CarModel}" Width="100"/>
+                    <DataGridTextColumn Header="Клиент" Binding="{Binding ClientName}" Width="160"/>
+                    <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="130"/>
+
+                    <!-- Красивый статус -->
+                    <DataGridTemplateColumn Header="Статус" Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Padding="5" CornerRadius="4" 
+                                        Background="{Binding Status, Converter={StaticResource StatusToTextConverter}, ConverterParameter=Color}">
+                                    <TextBlock Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}" 
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Foreground="Black"
+                                               FontWeight="Bold"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Проблема" Binding="{Binding ProblemDescription}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- Статус-бар -->
+            <StatusBar Grid.Row="2" Background="#ECEFF1">
+                <StatusBarItem>
+                    <TextBlock x:Name="StatusText" Text="Готово" Margin="5,0"/>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <ProgressBar x:Name="LoadingProgress" Width="120" Height="16" Visibility="Collapsed" IsIndeterminate="True"/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <TextBlock x:Name="ItemsCountText" Text="Заявок: 0" Margin="5,0"/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <TextBlock x:Name="UserInfoText" Margin="5,0"/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <TextBlock x:Name="DateTimeText" Margin="5,0"/>
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+    </DockPanel>
+</Window>

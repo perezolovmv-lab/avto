@@ -1,0 +1,70 @@
+<Window x:Class="AutoServiceApp.EditRequestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактирование заявки" Height="450" Width="500"
+        WindowStartupLocation="CenterOwner">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Номер заявки -->
+        <TextBlock Text="Номер заявки:" Grid.Row="0" Grid.Column="0" Margin="0,0,10,10" VerticalAlignment="Center"/>
+        <TextBlock x:Name="RequestIdText" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" VerticalAlignment="Center"/>
+
+        <!-- Дата добавления -->
+        <TextBlock Text="Дата добавления:" Grid.Row="1" Grid.Column="0" Margin="0,0,10,10" VerticalAlignment="Center"/>
+        <TextBlock x:Name="CreatedDateText" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" VerticalAlignment="Center"/>
+
+        <!-- Вид авто -->
+        <TextBlock Text="Вид авто:" Grid.Row="2" Grid.Column="0" Margin="0,0,10,10" VerticalAlignment="Center"/>
+        <TextBox x:Name="CarBrandTextBox" Grid.Row="2" Grid.Column="1" Margin="0,0,0,10" Height="25"/>
+
+        <!-- Модель авто -->
+        <TextBlock Text="Модель авто:" Grid.Row="3" Grid.Column="0" Margin="0,0,10,10" VerticalAlignment="Center"/>
+        <TextBox x:Name="CarModelTextBox" Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" Height="25"/>
+
+        <!-- ФИО клиента -->
+        <TextBlock Text="ФИО клиента:" Grid.Row="4" Grid.Column="0" Margin="0,0,10,10" VerticalAlignment="Center"/>
+        <TextBox x:Name="ClientNameTextBox" Grid.Row="4" Grid.Column="1" Margin="0,0,0,10" Height="25"/>
+
+        <!-- Номер телефона -->
+        <TextBlock Text="Телефон:" Grid.Row="5" Grid.Column="0" Margin="0,0,10,10" VerticalAlignment="Center"/>
+        <TextBox x:Name="PhoneTextBox" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10" Height="25"/>
+
+        <!-- Статус заявки -->
+        <TextBlock Text="Статус:" Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" VerticalAlignment="Center"/>
+
+        <ComboBox x:Name="StatusComboBox"
+          Grid.Row="6"
+          Grid.Column="1"
+          Margin="0,0,0,10"
+          Height="25"/>
+
+
+        <!-- Описание проблемы -->
+        <TextBlock Text="Описание проблемы:" Grid.Row="7" Grid.Column="0" Margin="0,0,10,10" VerticalAlignment="Top"/>
+        <TextBox x:Name="ProblemTextBox" Grid.Row="7" Grid.Column="1" Margin="0,0,0,10"
+                 Height="60" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+        <!-- Кнопки -->
+        <StackPanel Orientation="Horizontal" Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+            <Button Content="Сохранить" Click="Save_Click" Margin="5" Width="80" Height="30"/>
+            <Button Content="Отмена" Click="Cancel_Click" Margin="5" Width="80" Height="30"/>
+        </StackPanel>
+    </Grid>
+</Window>
